@@ -1,6 +1,7 @@
 #! /usr/bin/env ruby
 # Usage: ruby vlc_to_obs.rb /path/to/output_file.txt
 
+require 'cgi'
 require 'io/console'
 require 'nokogiri'
 require 'typhoeus'
@@ -17,7 +18,7 @@ begin
 
     artist = doc.xpath('//information/category[@name="meta"]/info[@name="artist"]')[0]
     title = doc.xpath('//information/category[@name="meta"]/info[@name="title"]')[0]
-    current_song = "#{artist&.content} - #{title&.content}"
+    current_song = CGI.unescapeHTML("#{artist&.text} - #{title&.text}")
 
     if last_song != current_song
       puts "[-] Now playing: #{current_song}"
